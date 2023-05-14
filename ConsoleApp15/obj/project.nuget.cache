@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GZ0Ceg8/zLkiPDIbCXp8yoXaIFJUX+/2J4agP03FEKRhaDU+CTCF+tXFBkoprZRCdjKFVWxGjGvzz76B4uehjg==",
+  "dgSpecHash": "xVxkZwwY3/FasnIKjzNVNbLKFmLJj3gUbkd3zfuW1/EFgaVixVT7Fgu6Xfp/gtrkF8YPWTznaXlHSdzZOrb20A==",
   "success": true,
-  "projectFilePath": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ConsoleApp15.csproj",
+  "projectFilePath": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ATMApp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

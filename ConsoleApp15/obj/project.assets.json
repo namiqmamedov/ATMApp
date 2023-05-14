@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ConsoleApp15.csproj",
-      "projectName": "ConsoleApp15",
-      "projectPath": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ConsoleApp15.csproj",
+      "projectUniqueName": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ATMApp.csproj",
+      "projectName": "ATMApp",
+      "projectPath": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ATMApp.csproj",
       "packagesPath": "C:\\Users\\Namiq\\.nuget\\packages\\",
       "outputPath": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\obj\\",
       "projectStyle": "PackageReference",
