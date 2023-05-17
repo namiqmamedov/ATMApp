@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ namespace ATMApp.UI
 {
     public static class Utility
     {
+        private static CultureInfo culture = new CultureInfo("en-US");
         public static string GetSecretInput(string prompt)
         {
             bool isPrompt = true;
@@ -86,6 +88,11 @@ namespace ATMApp.UI
         {
             Console.WriteLine("\n\n Press enter to continue... \n");
             Console.ReadLine();
+        }
+
+        public static string FormatAmount(decimal amt)
+        {
+            return String.Format(culture, "{0:C2}", amt);
         }
     }
 }

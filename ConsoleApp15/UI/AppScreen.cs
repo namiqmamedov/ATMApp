@@ -34,7 +34,6 @@ namespace ATMApp.UI
             return tempUserAccount;
         }
 
-
         internal static void LoginProgress() 
         {
             Console.WriteLine("Checking card number and PIN...");
@@ -48,6 +47,33 @@ namespace ATMApp.UI
             Utility.PressEnterToContinue();
             Environment.Exit(1);
         }
+
+        internal static void WelcomeCustomer(string fullName)
+        {
+            Console.WriteLine($"Welcome back, {fullName}");
+            Utility.PressEnterToContinue();
+        }
+
+        internal static void DisplayAppMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("--------My ATM App Menu");
+            Console.WriteLine(":                     :");
+            Console.WriteLine("1. Account Balance");
+            Console.WriteLine("2. Cash Deposit");
+            Console.WriteLine("3. Withdraw");
+            Console.WriteLine("4. Transfer");
+            Console.WriteLine("5. Transactions");
+            Console.WriteLine("6. Logout ");
+        }
+
+        internal static void LogOutProgress()
+        {
+            Console.WriteLine("Thank you for using My ATM App."); ;
+            Utility.PrintDotAnimation();
+            Console.Clear();
+        }
+
     }
     
 }
