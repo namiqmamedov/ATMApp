@@ -5,6 +5,7 @@ using ATMApp.Domain.Enums;
 using ATMApp.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace ATMApp.App
@@ -14,6 +15,8 @@ namespace ATMApp.App
         private List<UserAccount> userAccountList;
         private UserAccount selectedAccount;
         private List<Transaction> _listOfTransactions;
+        private const decimal minimumKeptAmount = 500;
+
 
         public void Run()
         {
@@ -105,13 +108,14 @@ namespace ATMApp.App
                     PlaceDeposit();
                     break;
                 case (int)AppMenu.MakeWithdrawal:
-                    Console.WriteLine("Making withdrawal...");
+                    MakeWithDraw();
                     break;
                 case (int)AppMenu.InternalTransfer:
-                    Console.WriteLine("Making internal transfer...");
+                    var internalTransfer = AppScreen.InternalTransferForm();
+                    ProcessInternalTransfer(internalTransfer); 
                     break;
                 case (int)AppMenu.ViewTransaction:
-                    Console.WriteLine("Viewing transactions...");
+                    ViewTransaction();
                     break;
                 case (int)AppMenu.Logout:
                     AppScreen.LogOutProgress();
@@ -155,7 +159,7 @@ namespace ATMApp.App
             }
 
             // bind transaction details to transaction object
-            InsertTransaction(selectedAccount.ID, TransactionType.Deposit, transaction_amt, "" /*< description */);
+            InsertTransaction(selectedAccount.ID, TransactionType.Deposit, transaction_amt, "" /* "" is description */);
 
             // update acc balance
 
@@ -168,7 +172,60 @@ namespace ATMApp.App
 
         public void MakeWithDraw()
         {
-            throw new NotImplementedException();
+            var transaction_amt = 0;
+            int selectedAmount = AppScreen.SelectAmount();
+            if(selectedAmount == -1)
+            {
+                selectedAmount = AppScreen.SelectAmount();
+            }
+            else if(selectedAmount != 0)
+            {
+                transaction_amt = selectedAmount;
+            }
+            else
+            {
+                transaction_amt = Validator.Convert<int>($"amount {AppScreen.cur}");
+            }
+            
+            // input validation 
+
+            if(transaction_amt <= 0)
+            {
+                Utility.PrintMessage("Amount needs to be greater than zero.Try again",false);
+                return;
+            }
+            if(transaction_amt % 500 != 0)
+            {
+                Utility.PrintMessage("You can only withdraw amount in multiples of 500 or 1000 usd. Try again.", false);
+                return;
+            }
+
+            // business logic validations 
+
+            if(transaction_amt > selectedAccount.AccountBalance) 
+            {
+                Utility.PrintMessage($"Withdrawal failed. Your balance is too low to withdraw ${Utility.FormatAmount(transaction_amt)}",false);
+                return;
+            }
+
+            if((selectedAccount.AccountBalance - transaction_amt) < minimumKeptAmount)
+            {
+                Utility.PrintMessage($"Withdarawal failed. Your account needs to have " + $"minimum {Utility.FormatAmount(minimumKeptAmount)}", false);
+                 return;
+            }
+
+            // bind withdarawal details to transaction object 
+
+            InsertTransaction(selectedAccount.ID, TransactionType.Withdrawal, -transaction_amt, "");
+
+            // update acc balance
+
+            selectedAccount.AccountBalance -= transaction_amt;
+
+            // success msg
+
+            Utility.PrintMessage($"You have successfully withdraw" + $"{Utility.FormatAmount(transaction_amt)}.",true); 
+            
         }
 
         private bool PreviewBankNotesCount(int amount)
@@ -204,6 +261,68 @@ namespace ATMApp.App
         public void ViewTransaction()
         {
             throw new NotImplementedException();
+        }
+
+        private void ProcessInternalTransfer(InternalTransfer internalTransfer) 
+        {
+            if(internalTransfer.TransferAmount <= 0)
+            {
+                Utility.PrintMessage("Amound needs to be more than zero. Try again.", false);
+                    return;  
+            }
+            // check sender's account balance
+
+            if(internalTransfer.TransferAmount > selectedAccount.AccountBalance) 
+            {
+                Utility.PrintMessage($"Transfer failed. You do not have enough balance $ to transfer {Utility.FormatAmount(internalTransfer.TransferAmount)}",false);
+                return;     
+            }
+
+            // check the minimum kept amount 
+
+            if((selectedAccount.AccountBalance - minimumKeptAmount) < minimumKeptAmount) 
+            {
+                Utility.PrintMessage($"Transfer failed. Your account needs to have minimum $ {Utility.FormatAmount(minimumKeptAmount)}",false);
+                return;
+            }
+
+            var selectedBankAccountReceiver = (from userAcc in userAccountList
+                                               where userAcc.AccountNumber == internalTransfer.RecipientBankAccountNumber
+                                               select userAcc).FirstOrDefault();
+
+            if(selectedBankAccountReceiver == null) 
+            {
+                Utility.PrintMessage("Transfer failed. Receiver bank account number is invalid.",false);
+                return;
+            }
+            
+            // check receiver's name 
+
+            if(selectedBankAccountReceiver.FullName != internalTransfer.RecipientBankAccounName)
+            {
+                Utility.PrintMessage("Transfer failed. Recipient;s  bank account name is invalid",false);
+                return;
+            }
+
+            // add transaction to transactions record sender
+
+            InsertTransaction(selectedAccount.ID,TransactionType.Transfer,-internalTransfer.TransferAmount,"Transfered " + $"to {selectedBankAccountReceiver.AccountNumber} ({selectedBankAccountReceiver.FullName})");
+
+            // update sender's account balance
+
+            selectedAccount.AccountBalance -= internalTransfer.TransferAmount;
+
+            // add transaction record-receiver
+            InsertTransaction(selectedBankAccountReceiver.ID, TransactionType.Transfer, internalTransfer.TransferAmount, "Transfered from " +
+                $"{selectedAccount.AccountNumber}({selectedAccount.FullName})");
+
+            // update reciver's account
+
+            selectedBankAccountReceiver.AccountBalance += internalTransfer.TransferAmount;
+
+            // print success message 
+
+            Utility.PrintMessage($"Tdu have successfully transfered" + $"{Utility.FormatAmount(internalTransfer.TransferAmount)} to " + $"{internalTransfer.RecipientBankAccounName}",true);
         }
     }
 }
