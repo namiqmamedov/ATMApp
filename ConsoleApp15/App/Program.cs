@@ -1,4 +1,5 @@
-﻿using ATMApp.Domain.Entities;
+﻿using ATMApp.Domain;
+using ATMApp.Domain.Entities;
 using ATMApp.Domain.Entities.Interfaces;
 using ATMApp.Domain.Enums;
 using ATMApp.UI;
@@ -8,10 +9,11 @@ using System.Threading;
 
 namespace ATMApp.App
 {
-    class Program : IUserLogin, IUserAccountActions
+    class Program : IUserLogin, IUserAccountActions,ITransaction
     {
         private List<UserAccount> userAccountList;
         private UserAccount selectedAccount;
+        private List<Transaction> _listOfTransactions;
 
         public void Run()
         {
@@ -43,6 +45,8 @@ namespace ATMApp.App
                     CardPin = 646564,AccountBalance = 1241294891,IsLocked = false
                 }
             };
+             
+            _listOfTransactions = new List<Transaction>();
         }
 
         public void CheckUserCardNumAndPassword()
@@ -98,7 +102,7 @@ namespace ATMApp.App
                     CheckBalance();
                     break;
                 case (int)AppMenu.PlaceDeposit:
-                    Console.WriteLine("Placing deposit...");
+                    PlaceDeposit();
                     break;
                 case (int)AppMenu.MakeWithdrawal:
                     Console.WriteLine("Making withdrawal...");
@@ -127,10 +131,77 @@ namespace ATMApp.App
 
         public void PlaceDeposit()
         {
-            Console.WriteLine("Only multiples of 500 and 100    0 USD allowed");
+            Console.WriteLine("Only multiples of 500 and 1000 USD allowed");
+            var transaction_amt = Validator.Convert<int>($"amount {AppScreen.cur}");
+
+            Console.WriteLine("\nChecking and Counting bank notes.");
+            Utility.PrintDotAnimation();
+            Console.WriteLine("");
+
+            if(transaction_amt <= 0)
+            {
+                Utility.PrintMessage("Amount needs to be greater than zero",false);
+                return;
+            }
+            if(transaction_amt % 500 != 0)
+            {
+                Utility.PrintMessage($"Enter deposit amount in multiples of 500 or 1000. Try again.",false);
+                return; 
+            }
+            if (PreviewBankNotesCount(transaction_amt) == false)
+            {
+                Utility.PrintMessage($"You have cancelled your action.", false);
+                return;
+            }
+
+            // bind transaction details to transaction object
+            InsertTransaction(selectedAccount.ID, TransactionType.Deposit, transaction_amt, "" /*< description */);
+
+            // update acc balance
+
+            selectedAccount.AccountBalance += transaction_amt;
+
+            Utility.PrintMessage($"Your deposit of {Utility.FormatAmount(transaction_amt)} was successfull", true);
+
+
         }
 
         public void MakeWithDraw()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool PreviewBankNotesCount(int amount)
+        {
+            int thousandNotesCount = amount / 1000;
+            int fiveHundredNotesCount = (amount % 1000) / 500;
+
+            Console.WriteLine("\nSummary");
+            Console.WriteLine("---------");
+            Console.WriteLine($"{AppScreen.cur}1000 X {thousandNotesCount} = {1000 * thousandNotesCount}");
+            Console.WriteLine($"{AppScreen.cur}500 X {fiveHundredNotesCount} = {500 * fiveHundredNotesCount } ");
+            Console.WriteLine($"Total amount: {Utility.FormatAmount(amount)}\n\n");
+
+            int opt = Validator.Convert<int>("1 to confirm");
+            return opt.Equals(1);
+        }
+
+        public void InsertTransaction(long _UserBankAccountID, TransactionType _tranType, decimal _tranAmount, string _desc)
+        {
+            var transaction = new Transaction()
+            {
+                TransactionID = Utility.GetTransactionID(),
+                UserBankAccountID = _UserBankAccountID,
+                TransactionDate = DateTime.Now,
+                TransactionType = _tranType,
+                TransactionAmount = _tranAmount,
+                Description = _desc
+            };
+
+            _listOfTransactions.Add(transaction);
+        }
+
+        public void ViewTransaction()
         {
             throw new NotImplementedException();
         }

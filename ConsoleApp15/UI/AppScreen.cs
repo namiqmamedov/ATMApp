@@ -10,6 +10,7 @@ namespace ATMApp.UI
 {
     public static class AppScreen
     {
+        internal const string cur = "$ ";
         internal static void Welcome()
         {
             Console.Clear();

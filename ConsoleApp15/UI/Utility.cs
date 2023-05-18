@@ -10,7 +10,13 @@ namespace ATMApp.UI
 {
     public static class Utility
     {
+        private static long tranID;
         private static CultureInfo culture = new CultureInfo("en-US");
+        
+        public static long GetTransactionID()
+        { 
+            return ++tranID; 
+        }
         public static string GetSecretInput(string prompt)
         {
             bool isPrompt = true;
