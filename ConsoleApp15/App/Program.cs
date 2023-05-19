@@ -3,6 +3,7 @@ using ATMApp.Domain.Entities;
 using ATMApp.Domain.Entities.Interfaces;
 using ATMApp.Domain.Enums;
 using ATMApp.UI;
+using ConsoleTables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,11 @@ namespace ATMApp.App
             AppScreen.Welcome();
             CheckUserCardNumAndPassword();
             AppScreen.WelcomeCustomer(selectedAccount.FullName);
-            AppScreen.DisplayAppMenu();
-            ProcessMenuOption();
-
+            while (true)
+            {
+                AppScreen.DisplayAppMenu();
+                ProcessMenuOption();
+            }
         }
 
         public void InitializeData()
@@ -260,7 +263,26 @@ namespace ATMApp.App
 
         public void ViewTransaction()
         {
-            throw new NotImplementedException();
+            var filteredTransactionList = _listOfTransactions.Where(t => t.UserBankAccountID == selectedAccount.ID).ToList();
+
+            // check if there's an transaction 
+
+            if(filteredTransactionList.Count > 0)
+            {
+                Utility.PrintMessage("You have no transaction yet.", true);
+            }
+            else
+            {
+                var table = new ConsoleTable("ID", "Transaction Date","Type","Descriptions","Amount" + AppScreen.cur);
+                foreach (var tran in filteredTransactionList)
+                {
+                    table.AddRow(tran.TransactionID, tran.TransactionDate, tran.TransactionType, tran.Description, tran.TransactionAmount);
+                }
+                table.Options.EnableCount = false;
+                table.Write();
+                Utility.PrintMessage($"You have {filteredTransactionList.Count} transaction(s)",true);
+            }
+
         }
 
         private void ProcessInternalTransfer(InternalTransfer internalTransfer) 
@@ -280,7 +302,7 @@ namespace ATMApp.App
 
             // check the minimum kept amount 
 
-            if((selectedAccount.AccountBalance - minimumKeptAmount) < minimumKeptAmount) 
+            if((selectedAccount.AccountBalance - internalTransfer.TransferAmount) < minimumKeptAmount) 
             {
                 Utility.PrintMessage($"Transfer failed. Your account needs to have minimum $ {Utility.FormatAmount(minimumKeptAmount)}",false);
                 return;
@@ -322,7 +344,7 @@ namespace ATMApp.App
 
             // print success message 
 
-            Utility.PrintMessage($"Tdu have successfully transfered" + $"{Utility.FormatAmount(internalTransfer.TransferAmount)} to " + $"{internalTransfer.RecipientBankAccounName}",true);
+            Utility.PrintMessage($"You have successfully transfered" + $"{Utility.FormatAmount(internalTransfer.TransferAmount)} to " + $"{internalTransfer.RecipientBankAccounName}",true);
         }
     }
 }

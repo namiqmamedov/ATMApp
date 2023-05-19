@@ -1,8 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "xVxkZwwY3/FasnIKjzNVNbLKFmLJj3gUbkd3zfuW1/EFgaVixVT7Fgu6Xfp/gtrkF8YPWTznaXlHSdzZOrb20A==",
+  "dgSpecHash": "QVlgpLt3SwfhS/wQHZC7dOVSDGgkiK5HEMCf060gGHC/hetK+i4MspkVkef8WN9EHFwbqWvUY8Gg17L6XFtFnw==",
   "success": true,
   "projectFilePath": "D:\\repos\\C#\\ConsoleApp15\\ConsoleApp15\\ATMApp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Namiq\\.nuget\\packages\\consoletables\\2.4.2\\consoletables.2.4.2.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.reflection.typeextensions\\4.3.0\\system.reflection.typeextensions.4.3.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
+    "C:\\Users\\Namiq\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512"
+  ],
   "logs": []
 }

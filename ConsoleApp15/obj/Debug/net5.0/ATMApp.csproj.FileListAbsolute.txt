@@ -14,3 +14,5 @@ D:\repos\C#\ConsoleApp15\ConsoleApp15\obj\Debug\net5.0\refint\ATMApp.dll
 D:\repos\C#\ConsoleApp15\ConsoleApp15\obj\Debug\net5.0\ATMApp.pdb
 D:\repos\C#\ConsoleApp15\ConsoleApp15\obj\Debug\net5.0\ATMApp.genruntimeconfig.cache
 D:\repos\C#\ConsoleApp15\ConsoleApp15\obj\Debug\net5.0\ref\ATMApp.dll
+D:\repos\C#\ConsoleApp15\ConsoleApp15\bin\Debug\net5.0\ConsoleTables.dll
+D:\repos\C#\ConsoleApp15\ConsoleApp15\obj\Debug\net5.0\ATMApp.csproj.CopyComplete
